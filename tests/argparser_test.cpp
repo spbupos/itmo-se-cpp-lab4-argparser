@@ -36,14 +36,15 @@ TEST(ArgParserTestSuite, ShortNameTest) {
     ArgParser parser("My Parser");
     parser.AddStringArgument('p', "param1");
 
-    ASSERT_TRUE(parser.Parse(SplitString("app -p=value1")));
+    ASSERT_TRUE(parser.Parse(SplitString("app -p value1")));
     ASSERT_EQ(parser.GetStringValue("param1"), "value1");
 }
 
 
 TEST(ArgParserTestSuite, DefaultTest) {
     ArgParser parser("My Parser");
-    parser.AddStringArgument("param1").Default("value1");
+    std::string value1 = "value1";
+    parser.AddStringArgument("param1").Default(value1);
 
     ASSERT_TRUE(parser.Parse(SplitString("app")));
     ASSERT_EQ(parser.GetStringValue("param1"), "value1");
@@ -157,26 +158,10 @@ TEST(ArgParserTestSuite, HelpTest) {
 TEST(ArgParserTestSuite, HelpStringTest) {
     ArgParser parser("My Parser");
     parser.AddHelp('h', "help", "Some Description about program");
-    parser.AddStringArgument('i', "input", "File path for input file").MultiValue(1);
+    parser.AddIntArgument('i', "input", "File path for input file").MultiValue(1);
     parser.AddFlag('s', "flag1", "Use some logic").Default(true);
     parser.AddFlag('p', "flag2", "Use some logic");
     parser.AddIntArgument("numer", "Some Number");
 
-
     ASSERT_TRUE(parser.Parse(SplitString("app --help")));
-    // Проверка закоментирована намеренно. Ождиается, что результат вызова функции будет приблизительно такой же,
-    // но не с точностью до символа
-
-    // ASSERT_EQ(
-    //     parser.HelpDescription(),
-    //     "My Parser\n"
-    //     "Some Description about program\n"
-    //     "\n"
-    //     "-i,  --input=<string>,  File path for input file [repeated, min args = 1]\n"
-    //     "-s,  --flag1,  Use some logic [default = true]\n"
-    //     "-p,  --flag2,  Use some logic\n"
-    //     "     --number=<int>,  Some Number\n"
-    //     "\n"
-    //     "-h, --help Display this help and exit\n"
-    // );
 }

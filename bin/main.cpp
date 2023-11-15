@@ -1,4 +1,4 @@
-#include <functional>
+/* #include <functional>
 #include <lib/ArgParser.h>
 
 #include <iostream>
@@ -42,4 +42,19 @@ int main(int argc, char** argv) {
 
     return 0;
 
+} */
+
+#include <iostream>
+#include <lib/ArgParser.h>
+
+int main() {
+    ArgumentParser::ArgParser parser("test");
+    std::vector<int> values;
+
+    parser.AddHelp('h', "help", "Program accumulate arguments");
+
+    std::vector<std::string> to_parse = {"test", "--help"};
+
+    bool result = parser.Parse(to_parse);
+    return 0;
 }

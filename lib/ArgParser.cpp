@@ -120,7 +120,8 @@ ArgumentParser::ArgParser& ArgumentParser::ArgParser::AddFlag(const std::string&
     return *this;
 }
 
-ArgumentParser::ArgParser& ArgumentParser::ArgParser::AddFlag(char short_name, const std::string& name, const std::string& description) {
+ArgumentParser::ArgParser& ArgumentParser::ArgParser::AddFlag(
+        char short_name, const std::string& name, const std::string& description) {
     Argument arg;
 
     arg.type = 'f';
@@ -217,12 +218,12 @@ bool ArgumentParser::ArgParser::PreParseCheck() {
 
 bool ArgumentParser::ArgParser::PostParseCheck() {
     /*
-     * post-check: all not-optional and not-default arguments must be set
-     * or have default value and all multi value arguments must have at
-     * least min_count values and not more than max_count values
+     * post-check: all not-optional, not-default and not-flag arguments must
+     * be set or have default value and all multi value arguments must have
+     * at least min_count values and not more than max_count values
      */
     for (int i = 0; i < arguments.size(); ++i) {
-        if (!arguments[i].optional and !arguments[i].is_default and !arguments[i].is_set)
+        if (!arguments[i].optional and !arguments[i].is_default and !arguments[i].is_set and !arguments[i].is_flag)
             return NotFoundError(arguments[i].long_name, HelpDescription());
         if (arguments[i].is_multi_value and
             (arguments[i].values_storage->size() < arguments[i].min_count or arguments[i].values_storage->size() > arguments[i].max_count))

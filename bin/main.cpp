@@ -49,12 +49,27 @@ int main(int argc, char** argv) {
 
 int main() {
     ArgumentParser::ArgParser parser("test");
-    std::vector<int> values;
 
-    parser.AddHelp('h', "help", "Program accumulate arguments");
+    int alpha, beta;
+    std::string gamma, delta;
+    bool flag = false;
+    parser.AddIntArgument('a', "alpha").StoreValue(alpha);
+    parser.AddIntArgument('b', "beta").StoreValue(beta);
+    parser.AddStringArgument('g', "gamma").StoreValue(gamma);
+    parser.AddStringArgument('d', "delta").StoreValue(delta);
+    parser.AddFlag('f', "flag").StoreValue(flag);
 
-    std::vector<std::string> to_parse = {"test", "--help"};
-
+    std::vector<std::string> to_parse = {"test", "--alpha=1", "-b", "2", "--gamma=str1", "-d", "str2", "--flag"};
     bool result = parser.Parse(to_parse);
+    if (result) {
+        std::cout << "alpha: " << alpha << '\n';
+        std::cout << "beta: " << beta << '\n';
+        std::cout << "gamma: " << gamma << '\n';
+        std::cout << "delta: " << delta << '\n';
+        std::cout << "flag: " << (flag ? "true" : "false") << '\n';
+    }
+    else {
+        std::cout << "Error" << '\n';
+    }
     return 0;
 }
